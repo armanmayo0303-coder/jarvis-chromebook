@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#06100c">
+  <meta name="description" content="J.A.R.V.I.S. lightweight personal assistant">
+  <title>J.A.R.V.I.S. — Personal Assistant</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="JARVIS home"><span class="brand-mark">J</span><span><b>J.A.R.V.I.S.</b><small>PERSONAL INTELLIGENCE SYSTEM</small></span></a>
+      <div class="top-status"><span class="pulse"></span><span id="systemStatus">STANDBY</span><span class="divider">/</span><span id="networkStatus">CHECKING NETWORK</span></div>
+      <button class="icon-btn" id="settingsTop" aria-label="Open settings" title="Settings">⚙</button>
+    </header>
+
+    <main>
+      <section id="welcome" class="welcome panel">
+        <div class="eyebrow">PERSONAL ASSISTANT // CHROME OS EDITION</div>
+        <h1>Good evening.<br><em>Systems are standing by.</em></h1>
+        <p class="muted">Your lightweight assistant interface is ready. Start a session to initialize available modules.</p>
+        <div class="welcome-actions">
+          <button class="primary-btn" id="startBtn"><span>▶</span> START JARVIS</button>
+          <button class="secondary-btn" id="continueBtn">CONTINUE SESSION</button>
+        </div>
+        <div class="welcome-foot"><span>LOCAL-FIRST DESIGN</span><span>BUILD 1.0.0</span><span>CHROMEBOOK OPTIMIZED</span></div>
+      </section>
+
+      <section id="dashboard" class="dashboard hidden">
+        <div class="hero panel">
+          <div class="hero-copy">
+            <div class="eyebrow">SYSTEM ONLINE <span class="tiny-dot"></span></div>
+            <h2>At your service.</h2>
+            <p class="muted">Ready when you are. Choose a module or ask a question.</p>
+            <div class="quick-stats"><span><b id="clock">--:--</b><small>LOCAL TIME</small></span><span><b id="modeLabel">LOCAL DEMO</b><small>AI MODE</small></span><span><b id="moduleCount">03</b><small>CORE MODULES</small></span></div>
+          </div>
+          <div class="orb-wrap" aria-label="Assistant status: standby">
+            <div class="orb-ring ring-one"></div><div class="orb-ring ring-two"></div><div class="orb-core"><div class="orb-glow"></div><span id="orbGlyph">J</span></div>
+            <div class="orb-caption" id="orbCaption">STANDBY</div>
+          </div>
+        </div>
+
+        <nav class="module-nav" aria-label="Assistant modules">
+          <button class="nav-btn active" data-view="chat">◈ <span>ASSISTANT</span></button>
+          <button class="nav-btn" data-view="camera">◎ <span>CAMERA</span></button>
+          <button class="nav-btn" data-view="voice">♫ <span>VOICE</span></button>
+          <button class="nav-btn" data-view="settings">⚙ <span>SETTINGS</span></button>
+        </nav>
+
+        <section id="view-chat" class="view panel">
+          <div class="section-head"><div><div class="eyebrow">01 / CONVERSATION</div><h3>Ask J.A.R.V.I.S.</h3></div><button class="text-btn" id="clearChat">CLEAR HISTORY</button></div>
+          <div id="chatLog" class="chat-log" aria-live="polite"><div class="message assistant"><span class="msg-tag">JARVIS // DEMO</span><p>Hello. I am online in local demo mode. Ask me something, or try “help”.</p></div></div>
+          <div class="chat-compose"><input id="chatInput" type="text" autocomplete="off" placeholder="Type a message or command…" aria-label="Message"><button id="sendBtn" class="primary-btn">SEND ↗</button></div>
+          <div class="hint">Demo mode runs locally. Configure a backend to enable cloud AI.</div>
+        </section>
+
+        <section id="view-camera" class="view panel hidden">
+          <div class="section-head"><div><div class="eyebrow">02 / OPTICAL SENSOR</div><h3>Camera module</h3></div><span class="status-chip" id="cameraStatus">OFFLINE</span></div>
+          <div class="camera-frame"><video id="cameraPreview" autoplay playsinline muted></video><div id="cameraPlaceholder" class="camera-placeholder"><span>◎</span><b>CAMERA STANDBY</b><small>Camera is off until you explicitly activate it.</small></div></div>
+          <div class="control-row"><button class="primary-btn" id="cameraStart">ACTIVATE CAMERA</button><button class="secondary-btn" id="cameraStop" disabled>STOP CAMERA</button></div>
+          <p class="hint">Uses a low-resolution stream. Video stays in this browser and is not uploaded.</p>
+        </section>
+
+        <section id="view-voice" class="view panel hidden">
+          <div class="section-head"><div><div class="eyebrow">03 / AUDIO INTERFACE</div><h3>Voice controls</h3></div><span class="status-chip" id="voiceStatus">STANDBY</span></div>
+          <div class="voice-card"><div class="voice-icon">♫</div><div><b>English voice output</b><p class="muted">Uses an installed browser/system voice. Voice availability varies by ChromeOS.</p></div></div>
+          <div class="control-row"><button class="primary-btn" id="speakTest">TEST ENGLISH VOICE</button><button class="secondary-btn" id="stopSpeech">STOP SPEAKING</button></div>
+          <div class="control-row"><button class="secondary-btn" id="listenBtn">🎙 PUSH TO TALK</button><span class="hint" id="speechSupport">Checking speech recognition…</span></div>
+          <p class="hint">Speech recognition may require internet and browser support. Push-to-talk is manual; no background listening or wake-word service is active.</p>
+        </section>
+
+        <section id="view-settings" class="view panel hidden">
+          <div class="section-head"><div><div class="eyebrow">04 / CONFIGURATION</div><h3>System settings</h3></div></div>
+          <div class="settings-grid">
+            <label>Assistant language<select id="language"><option value="en-US">English (US)</option><option value="en-GB">English (UK)</option><option value="ur-PK">Urdu (Pakistan)</option></select></label>
+            <label>Speech speed <span id="rateValue">1.0×</span><input id="speechRate" type="range" min="0.7" max="1.3" step="0.1" value="1"></label>
+            <label>Camera resolution<select id="cameraResolution"><option value="640x360">Low · 640 × 360</option><option value="320x240">Very low · 320 × 240</option></select></label>
+            <label>Cloud AI endpoint<input id="apiEndpoint" type="url" placeholder="https://your-server.example.com/api/chat"></label>
+            <label>ElevenLabs Voice ID<input id="voiceId" type="text" placeholder="Add your Voice ID later"></label>
+          </div>
+          <div class="settings-note"><b>Privacy controls</b><p>Camera and microphone are opt-in. API secrets belong on your backend, never in these settings or frontend code.</p><div id="permissionInfo">Permissions: not requested yet.</div></div>
+          <button class="primary-btn" id="saveSettings">SAVE SETTINGS</button>
+          <button class="text-btn" id="installBtn">INSTALL APP (if supported)</button>
+        </section>
+      </section>
+    </main>
+    <footer><span>J.A.R.V.I.S. // ORIGINAL COMMUNITY PROJECT</span><span>PRIVACY FIRST · LOW RESOURCE MODE</span></footer>
+  </div>
+  <div id="toast" role="status" class="toast" aria-live="polite"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
